@@ -1,54 +1,63 @@
-import discord
-import os
-import random
-from dotenv import load_dotenv
-from discord.ext import commands
+from warnings import simplefilter
+import discord, credentials, random
 
-load_dotenv()
+client = discord.Client()
 
 
-token = 'MTA0MTQ3NjU1NDE3NTI5OTU4NA.GA3WmI.LDYA1kwsF5dHV1vAmrygcQo4VwHroK0vxNPts4'
-
-intent = discord.Intents.default()
-client = commands.Bot(command_prefix="!", intents=intent)
-client = discord.Bot()
-
-@client.command()
-async def ping(ctx):
-  await ctx.send('Pong!')
-
+# Called when this successfully connects to Discord.
 @client.event
 async def on_ready():
-    print("Logged in as a bot {0.user}".format(client))
+    print(f"Debug: {client.user} is ready.")
 
 
 @client.event
 async def on_message(message):
-    username = str(message.author).split("#")[0]
-    channel = str(message.channel.name)
-    user_message = str(message.content)
+    print("Debug: Received message.")
 
-    print(f'Message {user_message} by {username} on {channel}')
-
+    # Avoiding the bot responding to itself.
     if message.author == client.user:
         return
 
-    if channel == "random":
-        if user_message.lower() == "hello" or user_message.lower() == "hi":
-            await message.channel.send(f'Hello {username}')
-            return
-        elif user_message.lower() == "bye":
-            await message.channel.send(f'Bye {username}')
-        elif user_message.lower() == "joke":
-            jokes = [" Can someone please shed more\
-            light on how my lamp got stolen?",
-                     "Why is she called llene? She\
-                     stands on equal legs.",
-                     "What do you call a gazelle in a \
-                     lions territory? Denzel."]
-            await message.channel.send(random.choice(jokes))
+    message_command = message.content.split(" ")[0]
+    message_choice = message.content.split(" ")[1]
+
+    if message_command == "!play":
+
+        print("Starting game.")
+
+        options = ["ROCK", "PAPER", "SCISSORS"]
+
+        if message_choice.upper() in options:
+            bot_choice_index = random.randint(0, len(options) - 1)
+            user_choice_index = options.index(message_choice.upper())
+
+            result = ""
+
+            # The next index beats the current index. Paper beats rock (1 beats 0), etc.
+            if bot_choice_index - user_choice_index == 1 or bot_choice_index - user_choice_index == -2:  # -2 for rocks vs scissors.
+                result = "win"
+            elif bot_choice_index - user_choice_index == -1 or bot_choice_index - user_choice_index == 2:  # The reverse for when player wins.
+                result = "lose"
+            elif bot_choice_index == user_choice_index:
+                result = "tie"
+
+            # Handling resulting messages.
+            if result == "win":
+                await message.channel.send(
+                    f"{options[bot_choice_index].capitalize()} beats {options[user_choice_index].lower()}. I win!")
+            elif result == "lose":
+                await message.channel.send(
+                    f"{options[user_choice_index].capitalize()} beats {options[bot_choice_index].lower()}. I lose!")
+            elif result == "tie":
+                await message.channel.send(
+                    f"We both picked {options[user_choice_index].lower()}, so it's a tie! Want to try again?")
+
+            print("Finishing game.")
+
+        else:
+            await message.channel.send("Sorry, you have to format the message as `!play rock/paper/scissors`")
+            print("Debug: Sending error message.")
 
 
-
-client.run(token)
-
+# Runs the client.
+client.run(credentials.TOKEN())
