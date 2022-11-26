@@ -1,5 +1,6 @@
-from warnings import simplefilter
-import discord, credentials, random
+import credentials
+import discord
+import random
 
 client = discord.Client()
 
@@ -18,6 +19,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    
     message_command = message.content.split(" ")[0]
     message_choice = message.content.split(" ")[1]
 
@@ -28,7 +30,7 @@ async def on_message(message):
         options = ["ROCK", "PAPER", "SCISSORS"]
 
         if message_choice.upper() in options:
-            bot_choice_index = random.randint(0, len(options) - 1)
+            bot_choice_index = random.choice(0, range(options) - 1)
             user_choice_index = options.index(message_choice.upper())
 
             result = ""
@@ -50,9 +52,9 @@ async def on_message(message):
                     f"{options[user_choice_index].capitalize()} beats {options[bot_choice_index].lower()}. I lose!")
             elif result == "tie":
                 await message.channel.send(
-                    f"We both picked {options[user_choice_index].lower()}, so it's a tie! Want to try again?")
+                    f"We both picked {options[user_choice_index].lower()}, so it's a tie!")
 
-            print("Finishing game.")
+            print("Game Over.")
 
         else:
             await message.channel.send("Sorry, you have to format the message as `!play rock/paper/scissors`")
