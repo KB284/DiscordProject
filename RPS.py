@@ -32,4 +32,4 @@ async def rps(ctx, user_choice, *, arg:str='None'):
     else:
         await ctx.send(f'Make sure your inputs are either {choices}')
 
-client.run("MTA0MTQ3NjU1NDE3NTI5OTU4NA.GBGYAJ.1f7I5HnYILJdSzNmyCC76w4AxdIjRDHQj0gpvw")
+client.run("token")

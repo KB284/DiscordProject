@@ -53,4 +53,4 @@ async def menu(ctx):
     await ctx.reply("Lets Play!", view=view)
 
 
-bot.run("MTA0MTQ3NjU1NDE3NTI5OTU4NA.GBGYAJ.1f7I5HnYILJdSzNmyCC76w4AxdIjRDHQj0gpvw")
+bot.run("token")
