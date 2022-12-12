@@ -1,36 +1,35 @@
-from discord.ext.commands import Bot
+import discord
 import random
+from discord.ext import commands
+from Discord_Buttons import menu
 
-bot = Bot(".")
-token = ('MTA0MTQ3NjU1NDE3NTI5OTU4NA.GBGYAJ.1f7I5HnYILJdSzNmyCC76w4AxdIjRDHQj0gpvw')
+client = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
+@client.command(name='rps', aliases=['RockPaperScissors'])
+async def rps(ctx, user_choice, *, arg:str='None'):
+    choices = ['rock','paper','scissors']
+    bot_choices = random.choice(choices)
+    user_choice = user_choice.lower()
 
-class RockPaperScissors():
-    while True:
+    if bot_choices == user_choice:
+        await ctx.send(f'This was a tie! bot of us picked {bot_choices}')
+    elif bot_choices == "rock" and user_choice == "paper":
+        await ctx.send(f'You picked {user_choice}, I picked {bot_choices}.\nResult: You won!')
+    elif bot_choices == "rock" and user_choice == "scissors":
+        await ctx.send(f'You picked {user_choice}, I picked {bot_choices}.\nResult: You lost!')
 
-        user_action =("Enter a choice (rock, paper, scissors): ")
-        possible_choices = ["rock", "paper", "scissors"]
-        computer_choices = random.choice(possible_choices)
-        print(f"\nYou chose {user_action}, computer chose {computer_choices}.\n")
+    elif bot_choices == "paper" and user_choice == "scissors":
+        await ctx.send(f'You picked {user_choice}, I picked {bot_choices}.\nResult: You won!')
+    elif bot_choices == "paper" and user_choice == "rock":
+        await ctx.send(f'You picked {user_choice}, I picked {bot_choices}.\nResult: You lost!')
 
-        if user_action == computer_choices:
-            print(f"Both players selected {user_action}. It's a tie!")
-        elif user_action == "rock":
-            if computer_choices == "scissors":
-                print("Rock smashes scissors! You win!")
-            else:
-                print("Paper covers rock! You lose.")
-        elif user_action == "paper":
-            if computer_choices == "rock":
-                print("Paper covers rock! You win!")
-            else:
-                print("Scissors cuts paper! You lose.")
-        elif user_action == "scissors":
-            if computer_choices == "paper":
-                print("Scissors cuts paper! You win!")
-            else:
-                print("Rock smashes scissors! You lose.")
+    elif bot_choices == "scissors" and user_choice == "rock":
+        await ctx.send(f'You picked {user_choice}, I picked {bot_choices}.\nResult: You won!')
+    elif bot_choices == "scissors" and user_choice == "paper":
+        await ctx.send(f'You picked {user_choice}, I picked {bot_choices}.\nResult: You lost!')
 
-        play_again = input("Play again? (y/n): ")
-        if play_again.lower() != "y":
-            break
+    else:
+        await ctx.send(f'Make sure your inputs are either {choices}')
+
+client.run("MTA0MTQ3NjU1NDE3NTI5OTU4NA.GBGYAJ.1f7I5HnYILJdSzNmyCC76w4AxdIjRDHQj0gpvw")
