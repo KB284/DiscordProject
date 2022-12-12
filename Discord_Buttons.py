@@ -1,8 +1,9 @@
 import discord
-import random
 from discord.ext import commands
 
+
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+client= discord.Client(intents=discord.Intents.all())
 
 
 @bot.event
@@ -15,28 +16,26 @@ class Menu(discord.ui.View):
         super().__init__()
         self.value = None
 
-    # Rock
-    @discord.ui.button(label="Who are you?.", style=discord.ButtonStyle.blurple)
-    async def Bot_Identify(self, button: discord.ui.Button, interaction: discord.Interaction):
-        await interaction.response.send_message("I am a bot.")
+    @discord.ui.button(label="What is the project?.", style=discord.ButtonStyle.blurple)
+    async def Project_Info(self, button: discord.ui.Button, interaction: discord.Interaction):
+        await interaction.response.send_message("The purpose of the project was to make me a bot that can play "
+                                                "rock, paper, scissors.")
 
-    # Paper
-    @discord.ui.button(label="What is your purpose?", style=discord.ButtonStyle.blurple)
-    async def Bot_Purpose(self, button: discord.ui.Button, interaction: discord.Interaction):
-        await interaction.response.send_message(content="To react to buttons.")
+    @discord.ui.button(label="How do I play?", style=discord.ButtonStyle.blurple)
+    async def Instruction(self, button: discord.ui.Button, interaction: discord.Interaction):
+        await interaction.response.send_message(content="You simply type '!rps' and then type your weapon of choice.")
 
 
-    # Scissors
-    @discord.ui.button(label="Why is there so many buttons?", style=discord.ButtonStyle.blurple)
-    async def Bots_Hubris(self, button: discord.ui.Button, interaction: discord.Interaction):
-        await interaction.response.send_message(content="Because I have the power to make many!!")
+    @discord.ui.button(label="What else can you do", style=discord.ButtonStyle.blurple)
+    async def Additional_Info(self, button: discord.ui.Button, interaction: discord.Interaction):
+        await interaction.response.send_message(content="I can direct you to the embedded links.")
 
 
     @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
     async def Quit(self, button: discord.ui.Button, interaction: discord.Interaction):
         embed = discord.Embed(color=discord.Color.random())
-        embed.set_author(name=f"Goodbye kid")
-        embed.add_field(name="Bye Bye", value="Turning off button functionality.")
+        embed.set_author(name=f"You're done?")
+        embed.add_field(name="Bye Bye", value="See you next time.")
         await interaction.response.edit_message(embed=embed)
         self.value = False
         self.stop()
@@ -51,8 +50,7 @@ async def menu(ctx):
                                     url="https://github.com/KB284"))
     view.add_item(discord.ui.Button(label="NileRed is a cool chemist.", style=discord.ButtonStyle.link,
                                     url="https://www.youtube.com/watch?v=saANxD0cqy0"))
-
-    await ctx.reply("Click to know about me...", view=view)
+    await ctx.reply("Lets Play!", view=view)
 
 
 bot.run("MTA0MTQ3NjU1NDE3NTI5OTU4NA.GBGYAJ.1f7I5HnYILJdSzNmyCC76w4AxdIjRDHQj0gpvw")
